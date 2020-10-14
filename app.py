@@ -22,7 +22,7 @@ from gevent.wsgi import WSGIServer
 app = Flask(__name__)
 
 # Model saved with Keras model.save()
-MODEL_PATH = 'models/best_weights.h5'
+MODEL_PATH = 'models/weights_best.h5'
 
 #Load the trained model
 model = load_model(MODEL_PATH)
@@ -77,7 +77,7 @@ def upload():
 
     #this section is used by gunicorn to serve the app on Heroku
 if __name__ == '__main__':
-        app.run()
+    app.run()
     #uncomment this section to serve the app locally with gevent at:  http://localhost:5000
     # Serve the app with gevent 
     #http_server = WSGIServer(('', 5000), app)
