@@ -5,4 +5,5 @@ Keras==2.4.3
 gevent>=1.2.2
 pillow>=4.3.0
 h5py>=2.7.0
+tensorflow>=1.12.1
 gunicorn==19.5.0
