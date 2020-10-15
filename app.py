@@ -16,7 +16,7 @@ from keras.preprocessing.image import img_to_array
 # Flask utils
 from flask import Flask, redirect, url_for, request, render_template
 from werkzeug.utils import secure_filename
-from gevent.wsgi import WSGIServer
+#from gevent.wsgi import WSGIServer
 
 # Define a flask app
 app = Flask(__name__)
@@ -26,22 +26,7 @@ MODEL_PATH = 'models/weights_best.h5'
 
 #Load the trained model
 model = load_model(MODEL_PATH)
-model._make_predict_function()          # Necessary to make everything ready to run on the GPU ahead of time
-
-def model_predict(img_path, model):
-    img = image.load_img(img_path, target_size=(96,96)) #target_size must agree with what the trained model expects!!
-
-    # Preprocessing the image
-    img = image.img_to_array(img)
-    img = np.expand_dims(img, axis=0)
-
-    x = image.img_to_array(img)
-    x = np.expand_dims(x,axis=0)
-    
-    images = np.vstack([x])
-    val = model.predict(images)
-    return val
-
+#model._make_predict_function()          # Necessary to make everything ready to run on the GPU ahead of time
 
 @app.route('/', methods=['GET'])
 def index():
@@ -61,15 +46,21 @@ def upload():
         f.save(file_path)
 
         # Make prediction
-        pred = model_predict(file_path, model)
-        
+        img = image.load_img(file_path, target_size=(96,96))
+
+        x = image.img_to_array(img)
+        x = np.expand_dims(x,axis=0)
+
+        images = np.vstack([x])
+        val = model.predict(images)
+
         str1 = 'Parasitized Cell'
         str2 = 'Uninfected'
         
         if val == 0:
             return str1
         else:
-            return str2
+            return str2    
         
         os.remove(file_path)#removes file from the server after prediction has been returned
         
